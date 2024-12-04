@@ -1,0 +1,224 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+public class HotelManagementApp {
+ private JFrame frame;
+ private JPanel mainPanel;
+ public HotelManagementApp() {
+ // Initialize JFrame
+ frame = new JFrame("Hotel Management System");
+ frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ frame.setSize(800, 600);
+ // Initialize CardLayout for switching screens
+ CardLayout cardLayout = new CardLayout();
+ mainPanel = new JPanel(cardLayout);
+ // Add screens to the CardLayout
+ mainPanel.add(createMenuScreen(cardLayout), "Menu");
+ mainPanel.add(createStaffScreen(cardLayout), "Staff");
+ mainPanel.add(createUserInfoScreen(cardLayout), "UserInfo");
+ mainPanel.add(createReservationScreen(cardLayout), "Reservation");
+ mainPanel.add(createBillingScreen(cardLayout), "Billing");
+ // Add mainPanel to frame
+ frame.add(mainPanel);
+ // Display the application
+ frame.setVisible(true);
+ }
+ private JPanel createMenuScreen(CardLayout cardLayout) {
+ JPanel menuPanel = new JPanel();
+ menuPanel.setLayout(new GridLayout(6, 1));
+ JLabel label = new JLabel("Hotel Management System", 
+SwingConstants.CENTER);
+ label.setFont(new Font("Arial", Font.BOLD, 24));
+ menuPanel.add(label);
+ JButton staffButton = new JButton("Staff Management");
+ JButton userInfoButton = new JButton("User Information");
+ JButton reservationButton = new JButton("Reservation");
+ JButton billingButton = new JButton("Billing System");
+ JButton exitButton = new JButton("Exit");
+ // Add action listeners
+ staffButton.addActionListener(e -> cardLayout.show(mainPanel, "Staff"));
+ userInfoButton.addActionListener(e -> cardLayout.show(mainPanel, 
+"UserInfo"));
+ reservationButton.addActionListener(e -> cardLayout.show(mainPanel, 
+"Reservation"));
+ billingButton.addActionListener(e -> cardLayout.show(mainPanel, "Billing"));
+ exitButton.addActionListener(e -> System.exit(0));
+ menuPanel.add(staffButton);
+ menuPanel.add(userInfoButton);
+ menuPanel.add(reservationButton);
+ menuPanel.add(billingButton);
+ menuPanel.add(exitButton);
+ return menuPanel;
+ }
+ private JPanel createStaffScreen(CardLayout cardLayout) {
+ JPanel staffPanel = new JPanel();
+ staffPanel.setLayout(new BorderLayout());
+ JLabel label = new JLabel("Staff Management", SwingConstants.CENTER);
+ label.setFont(new Font("Arial", Font.BOLD, 24));
+ staffPanel.add(label, BorderLayout.NORTH);
+ JTextArea staffText = new JTextArea(
+ "1. RAM\n" +
+ "2. SAM\n" +
+ "3. SOMU\n\n" +
+ "Enter staff number to manage rooms."
+ );
+ staffText.setEditable(false);
+ staffPanel.add(new JScrollPane(staffText), BorderLayout.CENTER);
+15
+ JTextField staffInput = new JTextField();
+ JButton submitButton = new JButton("Submit");
+ JLabel resultLabel = new JLabel("", SwingConstants.CENTER);
+ submitButton.addActionListener(e -> {
+ String input = staffInput.getText();
+ switch (input) {
+ case "1":
+ resultLabel.setText("RAM will take care of your housekeeping.");
+ break;
+ case "2":
+ resultLabel.setText("SAM will take care of your housekeeping.");
+ break;
+ case "3":
+ resultLabel.setText("SOMU will take care of your housekeeping.");
+ break;
+ default:
+ resultLabel.setText("Invalid staff number.");
+ }
+ });
+ JPanel inputPanel = new JPanel();
+ inputPanel.setLayout(new BorderLayout());
+ inputPanel.add(staffInput, BorderLayout.CENTER);
+ inputPanel.add(submitButton, BorderLayout.EAST);
+ staffPanel.add(inputPanel, BorderLayout.SOUTH);
+ staffPanel.add(resultLabel, BorderLayout.SOUTH);
+ JButton backButton = new JButton("Back");
+ backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
+ staffPanel.add(backButton, BorderLayout.PAGE_END);
+ return staffPanel;
+ }
+ private JPanel createUserInfoScreen(CardLayout cardLayout) {
+ JPanel userInfoPanel = new JPanel();
+ userInfoPanel.setLayout(new GridLayout(5, 2));
+ JLabel nameLabel = new JLabel("Name:");
+ JTextField nameField = new JTextField();
+ JLabel ageLabel = new JLabel("Age:");
+ JTextField ageField = new JTextField();
+ JLabel aadharLabel = new JLabel("Aadhar Number:");
+ JTextField aadharField = new JTextField();
+ JLabel panLabel = new JLabel("PAN Number:");
+ JTextField panField = new JTextField();
+ JButton submitButton = new JButton("Submit");
+ submitButton.addActionListener(e -> {
+ String name = nameField.getText();
+ String age = ageField.getText();
+ String aadhar = aadharField.getText();
+ String pan = panField.getText();
+ JOptionPane.showMessageDialog(frame, "User Info Saved:\n" +
+ "Name: " + name + "\n" +
+ "Age: " + age + "\n" +
+ "Aadhar: " + aadhar + "\n" +
+ "PAN: " + pan);
+ });
+ JButton backButton = new JButton("Back");
+ backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
+ userInfoPanel.add(nameLabel);
+ userInfoPanel.add(nameField);
+ userInfoPanel.add(ageLabel);
+ userInfoPanel.add(ageField);
+ userInfoPanel.add(aadharLabel);
+ userInfoPanel.add(aadharField);
+ userInfoPanel.add(panLabel);
+ userInfoPanel.add(panField);
+ userInfoPanel.add(backButton);
+ userInfoPanel.add(submitButton);
+ return userInfoPanel;
+ }
+ private JPanel createReservationScreen(CardLayout cardLayout) {
+ JPanel reservationPanel = new JPanel(new BorderLayout());
+ JLabel label = new JLabel("Reservation", SwingConstants.CENTER);
+ label.setFont(new Font("Arial", Font.BOLD, 24));
+ reservationPanel.add(label, BorderLayout.NORTH);
+ JTextArea instructions = new JTextArea(
+ "Press 1 for AC Room\n" +
+ "Press 2 for Non-AC Room\n" +
+ "Enter room number to reserve."
+ );
+ instructions.setEditable(false);
+ reservationPanel.add(new JScrollPane(instructions), BorderLayout.CENTER);
+ JTextField roomInput = new JTextField();
+ JButton reserveButton = new JButton("Reserve");
+ JLabel resultLabel = new JLabel("", SwingConstants.CENTER);
+ reserveButton.addActionListener(e -> {
+ String input = roomInput.getText();
+ resultLabel.setText(input.equals("1") ?
+ "You have selected an AC Room." : "You have selected a Non-AC 
+Room.");
+ });
+ JPanel inputPanel = new JPanel(new BorderLayout());
+ inputPanel.add(roomInput, BorderLayout.CENTER);
+ inputPanel.add(reserveButton, BorderLayout.EAST);
+ reservationPanel.add(inputPanel, BorderLayout.SOUTH);
+ reservationPanel.add(resultLabel, BorderLayout.PAGE_END);
+19
+ JButton backButton = new JButton("Back");
+ backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
+ reservationPanel.add(backButton, BorderLayout.PAGE_END);
+ return reservationPanel;
+ }
+ private JPanel createBillingScreen(CardLayout cardLayout) {
+ JPanel billingPanel = new JPanel(new BorderLayout());
+ JLabel label = new JLabel("Billing System", SwingConstants.CENTER);
+ label.setFont(new Font("Arial", Font.BOLD, 24));
+ billingPanel.add(label, BorderLayout.NORTH);
+ JPanel inputPanel = new JPanel(new GridLayout(6, 2, 10, 10));
+ JLabel roomChargesLabel = new JLabel("Room Charges:");
+ JTextField roomChargesField = new JTextField();
+ JLabel serviceChargesLabel = new JLabel("Service Charges:");
+ JTextField serviceChargesField = new JTextField();
+ JLabel taxLabel = new JLabel("Tax (%):");
+ JTextField taxField = new JTextField();
+ JLabel discountLabel = new JLabel("Discount (%):");
+ JTextField discountField = new JTextField();
+ JLabel totalLabel = new JLabel("Total Amount:");
+ JLabel totalAmountLabel = new JLabel("0.0");
+ JButton calculateButton = new JButton("Calculate");
+ calculateButton.addActionListener(e -> {
+ try {
+ double roomCharges = Double.parseDouble(roomChargesField.getText());
+ double serviceCharges = 
+Double.parseDouble(serviceChargesField.getText());
+ double tax = Double.parseDouble(taxField.getText());
+ double discount = Double.parseDouble(discountField.getText());
+ double totalBeforeTax = roomCharges + serviceCharges;
+ double taxAmount = totalBeforeTax * (tax / 100);
+ double discountAmount = totalBeforeTax * (discount / 100);
+ double totalAmount = totalBeforeTax + taxAmount - discountAmount;
+ totalAmountLabel.setText(String.format("%.2f", totalAmount));
+ } catch (NumberFormatException ex) {
+ JOptionPane.showMessageDialog(frame, "Please enter valid numeric 
+values.", "Error", JOptionPane.ERROR_MESSAGE);
+ }
+ });
+ JButton backButton = new JButton("Back");
+ backButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
+ inputPanel.add(roomChargesLabel);
+ inputPanel.add(roomChargesField);
+ inputPanel.add(serviceChargesLabel);
+ inputPanel.add(serviceChargesField);
+ inputPanel.add(taxLabel);
+ inputPanel.add(taxField);
+ inputPanel.add(discountLabel);
+ inputPanel.add(discountField);
+ inputPanel.add(totalLabel);
+ inputPanel.add(totalAmountLabel);
+ JPanel buttonPanel = new JPanel(new FlowLayout());
+ buttonPanel.add(calculateButton);
+ buttonPanel.add(backButton);
+ billingPanel.add(inputPanel, BorderLayout.CENTER);
+ billingPanel.add(buttonPanel, BorderLayout.SOUTH);
+ return billingPanel;
+ }
+ public static void main(String[] args) {
+ SwingUtilities.invokeLater(HotelManagementApp::new);
+ }
+}
